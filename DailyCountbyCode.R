@@ -16,13 +16,14 @@
 
 DailyCountbyCode<-function(
   gdelt_df_name,
-  subcodes,
   disaster.name,
   time.start,
   disaster.start,
   disaster.end,
   time.end,
   data.destination,
+  plotname=gdelt_df_name,
+  subcodes,
   subnames=subcodes,
   col=NA,
   lty=NA)
@@ -48,15 +49,16 @@ DailyCountbyCode<-function(
   eval(parse(text=paste("codetrends<-aggregate(codedummies, list(", gdelt_df_name, "$date), sum)", sep="")))
   colnames(codetrends)[1]<-"date"
   
-  if(is.na(col)){
+  if(is.na(col[1])){
     col<-rep("black", length(subcodes))
   }
   
-  if(is.na(lty)){
+  
+  if(is.na(lty[1])){
     lty<-c(1:length(subcodes))
   }
   
-  eval(parse(text=paste("pdf('", data.destination, disaster.name, "_dailycountbycode.pdf',height=6, w=11)", sep="")))
+  eval(parse(text=paste("pdf('", data.destination, plotname, "_dailycountbycode.pdf',height=6, w=11)", sep="")))
   eval(parse(text=paste("plot(codetrends$date, codetrends[,3], xlab='date', ylab='event count', type='l', ylim=c(0, 1.4*max(codetrends[,-1:-2])), col=col[1], lty=lty[1], main='GDELT events concerning ", disaster.name, "')", sep="")))
   
   for(row in 2:length(subcodes)){

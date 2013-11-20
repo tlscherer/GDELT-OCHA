@@ -1,5 +1,6 @@
 #' Take in a dataframe from GDELT and breakdown counts of cameo codes by temporal relation to disaster
 #' 
+#' CAMEO Codes found at http://gdelt.utdallas.edu/data/lookups/CAMEO.eventcodes.txt
 #' 
 #' @aliases CameoBreakdown
 #' @param gdelt_df dataframe, subset of GDELT data
@@ -13,6 +14,7 @@
 #' @return NA
 #' @export
 #' @details
+#'
 #'
 
 
@@ -101,21 +103,15 @@ CameoBreakdown<-function(
   for(e in eventlevel){
     # looped across e
     # merged.Event'e'agg.norm --> 'name'_norm_'e'code.pdf
-    # Create event specific histogram using 2 digit root codes 
+    # Create event specific histogram using 2 (root) or 3 (base) digit root codes 
     eval(parse(text=paste("pdf('", data.destination, gdelt_df_name, "_norm_", e, "code.pdf', height=5, w=", ifelse(e=="Root", "8", "14"), ")", sep="")))
-    eval(parse(text=paste("barplot(t(as.matrix(merged.Event", e, "agg.norm[,2:",1+length(timing) ,"])), names.arg=merged.Event", e, "agg.norm[,1], beside=TRUE, col=c('", allcol ,"'), main='GDELT events around ", disaster.name, "', xlab='GDELT Root Code', ylab='Event Count Normalized by Total Events')", sep="")))
+    eval(parse(text=paste("barplot(t(as.matrix(merged.Event", e, "agg.norm[,2:",1+length(timing) ,"])), names.arg=merged.Event", e, "agg.norm[,1], beside=TRUE,", ifelse(e=="Base", " las=2, cex.names=.6, ", ""), "col=c('", allcol ,"'), main='GDELT events around ", disaster.name, "', xlab='GDELT Root Code', ylab='Event Count Normalized by Total Events')", sep="")))
     eval(parse(text=paste("legend('topright', legend=c('", allt, "'), pch=15, title='Timing vs. ", disaster.name, "', col=c('", allcol ,"'))", sep="")))
     dev.off()
   }
 }
 
-
   
-
-      
-  
-
-    
     
     
     
